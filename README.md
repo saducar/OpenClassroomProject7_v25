@@ -1,1 +1,1 @@
-## **Open Classroom Project7_v25**
+# Fast API for model predictions
