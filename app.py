@@ -9,11 +9,11 @@ app = FastAPI()
 
 model = pickle.load(open('lgbmodel.pkl', 'rb'))
 
-@app.get('/')
-def index():
-    return {'message': 'Hello, World'}
+#@app.get('/')
+#def index():
+#    return {'message': 'Hello, World'}
 
-@app.post("/predict")
+@app.post("/")### predict
 def predict_credit_score(features: List[Credit_Score_In]):
     df = pd.DataFrame([i.dict() for i in features])
     # pred = model.predict(df)
