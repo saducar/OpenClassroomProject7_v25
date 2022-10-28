@@ -47,6 +47,7 @@ plt.legend()
 plt.xlabel(variables)
 plt.ylabel('Density')
 plt.title(f'Distribution of {variables} by target value')
+plt.close()
 st.pyplot(fig1)
 
 st.subheader('Scatter plots between Variables')
@@ -67,6 +68,7 @@ plt.legend()
 plt.xlabel(variable1)
 plt.ylabel(variable2)
 plt.title(f'Scatter plot between the {variable1} and {variable2} by target value')
+plt.close()
 st.pyplot(fig2)
 
 st.subheader('Correlation Heatmaps')
@@ -80,6 +82,7 @@ corr = df.corr().abs()
 sns.heatmap(corr, cmap=plt.cm.RdYlBu_r, vmin=-0.25, annot=True, vmax=0.6)
 plt.title('Correlation Heatmap')
 #plt.savefig("./images/"+dataset+".png")
+plt.close()
 st.pyplot(fig3)
 
 # Pie Chart
@@ -98,6 +101,7 @@ plt.pie(sizes, labels=labels,
 
 plt.axis('equal')
 #plt.savefig("./images/PieChart.png")
+plt.close()
 st.pyplot(fig4)
 
 # Credit Amount 
@@ -129,6 +133,7 @@ plt.plot(data["Age_cat"], data["AMT_INCOME_TOTAL"], color="blue")
 plt.title("Age(years) vs Amount of Income")
 #plt.savefig("./images/" + "AGE_AMT_OF_INCOME" + ".png")
 # plt.show()
+plt.close()
 st.pyplot(fig5)
 #
 
@@ -138,6 +143,7 @@ plt.plot(data["Age_cat"], data["AMT_CREDIT"], color="red")
 plt.title("Age(years) vs Amount of Credit")
 #plt.savefig("./images/" + "AGE_AMT_OF_CREDIT" + ".png")
 # plt.show()
+plt.close()
 st.pyplot(fig6)
 #
 
@@ -147,6 +153,7 @@ plt.plot(data["Age_cat"], data["FLAG_OWN_REALTY"], color="green")
 plt.title("Age(years) vs Flag Own Realty")
 #plt.savefig("./images/" + "AGE_FLAG_OWN_REALITY" + ".png")
 # plt.show()
+plt.close()
 st.pyplot(fig7)
 #
 st.write("Age vs Days Employed")
@@ -154,7 +161,8 @@ fig8 = plt.figure(figsize=(10, 5))
 plt.plot(data2["Age_cat"], data2["DAYS_EMPLOYED"], color="violet")
 plt.title("Age(years) vs Days Employed")
 #plt.savefig("./images/" + "AGE_DAYS_EMPLOYED" + ".png")
-plt.show()
+#plt.show()
+plt.close()
 st.pyplot(fig8)
 
 focus={'AMT_CREDIT_PERCENT': "the average between the loan and the income",
@@ -202,7 +210,8 @@ try:
         plt.barh(temp.index, temp[temp.columns[0]], color=plt.cm.Accent_r(np.arange(len(temp))))
         plt.title(key)
         #plt.savefig("./images/"+key+".png")
-        plt.show()
+        #plt.show()
+        plt.close()
         st.pyplot(fig9)
 
         if is_default:
@@ -217,7 +226,8 @@ try:
             # result.groupby(['Age(years)','AMT_INCOME_TOTAL']).sum().unstack().plot()
             plt.title("Age Groups vs Average Amount of Income")
             #plt.savefig("./images/" + "AVG_AGE_AMT_OF_INCOME_BAR" + ".png")
-            plt.show()
+            #plt.show()
+            plt.close()
             st.pyplot(fig10)
 
             st.write("Age vs Total Amount Credit")
@@ -227,7 +237,8 @@ try:
             plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_CREDIT"]+10000)
             plt.title("Age Groups vs Average Amount of Credit")
             #plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
-            plt.show()
+            #plt.show()
+            plt.close()
             st.pyplot(fig11)
         
 except:
