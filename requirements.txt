@@ -11,6 +11,5 @@ pickle-mixin
 shap
 Pillow
 requests
-json
 lime
 scikit-learn
