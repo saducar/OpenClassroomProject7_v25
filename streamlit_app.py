@@ -35,7 +35,7 @@ result = load_data('results')
 st.subheader('Distribution of Variables')
 variables = st.selectbox(
   'Choose Variable for Density Plot',
-  ('DAYS_BIRTH', 'AMT_ANNUITY_x','EXT_SOURCE_2', 'EXT_SOURCE_3', 'CREDIT_INCOME_PERCENT', 
+  ('DAYS_BIRTH', 'AMT_ANNUITY_x','EXT_SOURCE_2', 'EXT_SOURCE_3', 'AMT_CREDIT_PERCENT', 
   'ANNUITY_INCOME_PERCENT','CREDIT_TERM','DAYS_EMPLOYED_PERCENT','AMT_APPLICATION_PERCENT','FLAG_OWN_REALTY','AMT_INCOME_TOTAL','NAME_EDUCATION_TYPE',
   'DAYS_EMPLOYED','AMT_GOODS_PRICE_PERCENT'))
 
@@ -52,7 +52,7 @@ st.pyplot(fig1)
 st.subheader('Scatter plots between Variables')
 variable1 = st.selectbox(
   'Choose Variable for X-axis',
-  ('DAYS_BIRTH', 'AMT_ANNUITY_x','EXT_SOURCE_2', 'EXT_SOURCE_3', 'CREDIT_INCOME_PERCENT', 
+  ('DAYS_BIRTH', 'AMT_ANNUITY_x','EXT_SOURCE_2', 'EXT_SOURCE_3', 'AMT_CREDIT_PERCENT', 
   'ANNUITY_INCOME_PERCENT','CREDIT_TERM','DAYS_EMPLOYED_PERCENT','AMT_APPLICATION_PERCENT','FLAG_OWN_REALTY','AMT_INCOME_TOTAL','NAME_EDUCATION_TYPE',
   'DAYS_EMPLOYED','AMT_GOODS_PRICE_PERCENT'))
 variable2 = st.selectbox(
