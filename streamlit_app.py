@@ -13,6 +13,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import make_pipeline,Pipeline
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+
 from lime.lime_tabular import LimeTabularExplainer
 import shap
 
@@ -25,17 +26,18 @@ st.title('Home Credit Default Risk')
 
 @st.cache(allow_output_mutation=True)
 def load_data(file):
-    df = pd.read_csv(f'/data/{file}.csv')
+    df = pd.read_csv(f'./data/{file}.csv')
     return df
 
-train_df = load_data('train_data_domain')
+train_df = load_data('train_data')
 result = load_data('results')
 
 st.subheader('Distribution of Variables')
 variables = st.selectbox(
-  'Choose Variable for Histogram Plot',
-  ('DAYS_BIRTH', 'EXT_SOURCE_2', 'EXT_SOURCE_3', 'CREDIT_INCOME_PERCENT', 
-  'ANNUITY_INCOME_PERCENT','CREDIT_TERM','DAYS_EMPLOYED_PERCENT'))
+  'Choose Variable for Density Plot',
+  ('DAYS_BIRTH', 'AMT_ANNUITY_x','EXT_SOURCE_2', 'EXT_SOURCE_3', 'CREDIT_INCOME_PERCENT', 
+  'ANNUITY_INCOME_PERCENT','CREDIT_TERM','DAYS_EMPLOYED_PERCENT','AMT_APPLICATION_PERCENT','FLAG_OWN_REALTY','AMT_INCOME_TOTAL','NAME_EDUCATION_TYPE',
+  'DAYS_EMPLOYED','AMT_GOODS_PRICE_PERCENT'))
 
 fig1 = plt.figure(figsize=(10,8))
 train_df[variables]=train_df[variables].abs()
@@ -47,23 +49,43 @@ plt.ylabel('Density')
 plt.title(f'Distribution of {variables} by target value')
 st.pyplot(fig1)
 
+st.subheader('Scatter plots between Variables')
+variable1 = st.selectbox(
+  'Choose Variable for X-axis',
+  ('DAYS_BIRTH', 'AMT_ANNUITY_x','EXT_SOURCE_2', 'EXT_SOURCE_3', 'CREDIT_INCOME_PERCENT', 
+  'ANNUITY_INCOME_PERCENT','CREDIT_TERM','DAYS_EMPLOYED_PERCENT','AMT_APPLICATION_PERCENT','FLAG_OWN_REALTY','AMT_INCOME_TOTAL','NAME_EDUCATION_TYPE',
+  'DAYS_EMPLOYED','AMT_GOODS_PRICE_PERCENT'))
+variable2 = st.selectbox(
+  'Choose Variable for Y-axis',
+  ('DAYS_BIRTH', 'AMT_ANNUITY_x','EXT_SOURCE_2', 'EXT_SOURCE_3', 'CREDIT_INCOME_PERCENT', 
+  'ANNUITY_INCOME_PERCENT','CREDIT_TERM','DAYS_EMPLOYED_PERCENT','AMT_APPLICATION_PERCENT','FLAG_OWN_REALTY','AMT_INCOME_TOTAL','NAME_EDUCATION_TYPE',
+  'DAYS_EMPLOYED','AMT_GOODS_PRICE_PERCENT'))
+
+fig2 = plt.figure(figsize=(10,8))
+sns.scatterplot(data=train_df, x=variable1, y=variable2, hue="TARGET")
+plt.legend()
+plt.xlabel(variable1)
+plt.ylabel(variable2)
+plt.title(f'Scatter plot between the {variable1} and {variable2} by target value')
+st.pyplot(fig2)
+
 st.subheader('Correlation Heatmaps')
 dataset = st.selectbox(
   'Choose data for Correlation Heatmap',
   ('Credit_Card_Balance', 'Installments_Payments', 'Previous_Application'))
 
-fig2 = plt.figure(figsize=(20,15))
+fig3 = plt.figure(figsize=(20,15))
 df = load_data(dataset)
 corr = df.corr().abs()
 sns.heatmap(corr, cmap=plt.cm.RdYlBu_r, vmin=-0.25, annot=True, vmax=0.6)
 plt.title('Correlation Heatmap')
-#plt.savefig("/images/"+dataset+".png")
-st.pyplot(fig2)
+plt.savefig("./images/"+dataset+".png")
+st.pyplot(fig3)
 
 # Pie Chart
 
 st.write('Pie Chart')
-fig3 = plt.figure(figsize=(8, 8))
+fig4 = plt.figure(figsize=(8, 8))
 
 labels=['Default', 'Non-Default']
 sizes=[result[result['Class']==1]['Class'].count(), result[result['Class']==0]['Class'].count()]
@@ -75,15 +97,15 @@ plt.pie(sizes, labels=labels,
         explode = [0, 0.1])
 
 plt.axis('equal')
-#plt.savefig("/images/PieChart.png")
-st.pyplot(fig3)
+plt.savefig("./images/PieChart.png")
+st.pyplot(fig4)
 
 # Credit Amount 
 
 st.write('Credit Amount')
 amtCredit=result.sort_values(by='AMT_CREDIT', ascending=False)[['SK_ID_CURR', 'AMT_CREDIT']]
 amtCredit.set_index('SK_ID_CURR')[:20].plot.barh(figsize=(10, 10))
-#plt.savefig("/images/CreditAmount.png")
+plt.savefig("./images/CreditAmount.png")
 plt.show()
 st.pyplot()
 
@@ -101,38 +123,39 @@ data2 = train_df.groupby(by="Age_cat", as_index=False).mean()
 
 # print(data.head())
 st.write("Age Vs Amount Income")
-fig6 = plt.figure(figsize = (10, 5))
+fig5 = plt.figure(figsize = (10, 5))
 plt.plot(data["Age_cat"], data["AMT_INCOME_TOTAL"], color="blue")
 # result.groupby(['Age(years)','AMT_INCOME_TOTAL']).sum().unstack().plot()
 plt.title("Age(years) vs Amount of Income")
-plt.savefig("AGE_AMT_OF_INCOME" + ".png")
+plt.savefig("./images/" + "AGE_AMT_OF_INCOME" + ".png")
 # plt.show()
-st.pyplot(fig6)
+st.pyplot(fig5)
+#
 
 st.write("Age vs Total Amount Credit")
-fig7 = plt.figure(figsize=(10, 5))
+fig6 = plt.figure(figsize=(10, 5))
 plt.plot(data["Age_cat"], data["AMT_CREDIT"], color="red")
 plt.title("Age(years) vs Amount of Credit")
-plt.savefig("AGE_AMT_OF_CREDIT" + ".png")
+plt.savefig("./images/" + "AGE_AMT_OF_CREDIT" + ".png")
 # plt.show()
-st.pyplot(fig7)
+st.pyplot(fig6)
 #
 
 st.write("Age vs Flag Own Realty")
-fig8 = plt.figure(figsize=(10, 5))
+fig7 = plt.figure(figsize=(10, 5))
 plt.plot(data["Age_cat"], data["FLAG_OWN_REALTY"], color="green")
 plt.title("Age(years) vs Flag Own Realty")
-plt.savefig("AGE_FLAG_OWN_REALITY" + ".png")
+plt.savefig("./images/" + "AGE_FLAG_OWN_REALITY" + ".png")
 # plt.show()
-st.pyplot(fig8)
+st.pyplot(fig7)
 #
 st.write("Age vs Days Employed")
-fig9 = plt.figure(figsize=(10, 5))
+fig8 = plt.figure(figsize=(10, 5))
 plt.plot(data2["Age_cat"], data2["DAYS_EMPLOYED"], color="violet")
 plt.title("Age(years) vs Days Employed")
-plt.savefig("AGE_DAYS_EMPLOYED" + ".png")
+plt.savefig("./images/" + "AGE_DAYS_EMPLOYED" + ".png")
 plt.show()
-st.pyplot(fig9)
+st.pyplot(fig8)
 
 focus={'AMT_CREDIT_PERCENT': "the average between the loan and the income",
        'AMT_APPLICATION':'For how much credit did client ask on the previous application',
@@ -175,17 +198,17 @@ try:
         temp['SameGroup']=np.average(sameClass[key].values)
         temp['OppGroup']=np.average(oppClass[key].values)
         temp = temp.T
-        fig4 = plt.figure(figsize=(10, 5))
+        fig9 = plt.figure(figsize=(10, 5))
         plt.barh(temp.index, temp[temp.columns[0]], color=plt.cm.Accent_r(np.arange(len(temp))))
         plt.title(key)
-        #plt.savefig("/images/"+key+".png")
+        plt.savefig("./images/"+key+".png")
         plt.show()
-        st.pyplot(fig4)
+        st.pyplot(fig9)
 
         if is_default:
 
             st.write("Age Vs Amount Income")
-            fig12 = plt.figure(figsize=(10, 5))
+            fig10 = plt.figure(figsize=(10, 5))
             # fig_1, ax_1 = plt.subplots()
 
             plt.bar(data["Age_cat"], data["AMT_INCOME_TOTAL"], color="blue")
@@ -193,19 +216,19 @@ try:
             plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_INCOME_TOTAL"]+10000)
             # result.groupby(['Age(years)','AMT_INCOME_TOTAL']).sum().unstack().plot()
             plt.title("Age Groups vs Average Amount of Income")
-            plt.savefig("AVG_AGE_AMT_OF_INCOME_BAR" + ".png")
+            plt.savefig("./images/" + "AVG_AGE_AMT_OF_INCOME_BAR" + ".png")
             plt.show()
-            st.pyplot(fig12)
+            st.pyplot(fig10)
 
             st.write("Age vs Total Amount Credit")
-            fig13 = plt.figure(figsize=(10, 5))
+            fig11 = plt.figure(figsize=(10, 5))
             plt.bar(data["Age_cat"], data["AMT_CREDIT"], color="red")
             plt.hlines(y=client["AMT_CREDIT"], xmin=0, xmax="60-70")
             plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_CREDIT"]+10000)
             plt.title("Age Groups vs Average Amount of Credit")
-            plt.savefig("AVG_AGE_AMT_OF_CREDIT" + ".png")
+            plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
             plt.show()
-            st.pyplot(fig13)
+            st.pyplot(fig11)
         
 except:
   print('Please enter client ID again')
@@ -227,8 +250,6 @@ num_cols = ['AMT_INCOME_TOTAL','AMT_CREDIT','AMT_ANNUITY_x','REGION_POPULATION_R
             'AMT_REQ_CREDIT_BUREAU_DAY','AMT_REQ_CREDIT_BUREAU_WEEK','AMT_REQ_CREDIT_BUREAU_MON','AMT_REQ_CREDIT_BUREAU_QRT','AMT_REQ_CREDIT_BUREAU_YEAR','AMT_ANNUITY_y','AMT_APPLICATION','AMT_GOODS_PRICE',
             'NAME_CASH_LOAN_PURPOSE','NAME_CONTRACT_STATUS','DAYS_DECISION','NAME_PAYMENT_TYPE','CODE_REJECT_REASON','NAME_CLIENT_TYPE','NAME_GOODS_CATEGORY','NAME_PORTFOLIO','NAME_PRODUCT_TYPE','SELLERPLACE_AREA',
             'CNT_PAYMENT','NAME_YIELD_GROUP','AMT_CREDIT_PERCENT','AMT_APPLICATION_PERCENT','AMT_GOODS_PRICE_PERCENT']
-
-train_df = load_data('train_data_use')
 
 # Creating column transformer to select all column names that has Binary & a list for non Binary.
 
@@ -281,7 +302,7 @@ components.html(exp.as_html(), height=800)
 
 st.subheader("Shap Explanation plots") 
 
-sub_sampled_train_data = shap.sample(train_data, 1000, random_state=0) # use 1000 samples of train data as background data
+sub_sampled_train_data = shap.sample(train_data, 10000, random_state=0) # use 1000 samples of train data as background data
 
 subsampled_test_data = test_data[idx].reshape(1,-1)
 
@@ -298,8 +319,13 @@ st.write(f"SHAP expected value: {[explainer.expected_value]}")
 st.write(f"Model mean value : {[lb.predict_proba(train_data).mean(axis=0)]}")
 st.write(f"Model prediction for test data : {[lb.predict_proba(subsampled_test_data)]}")
 
-force_plot = shap.force_plot(explainer.expected_value[1], shap_values[1][0], subsampled_test_data[idx], feature_names=X_train.columns, matplotlib=True, show=False)
-st.pyplot(force_plot)
+try:
+
+   force_plot = shap.force_plot(explainer.expected_value[1], shap_values[1][0], subsampled_test_data[idx], feature_names=X_train.columns, matplotlib=True, show=False)
+   st.pyplot(force_plot)
+
+except:
+   st.write("Error due to index out of bounds")
 
 st.write('Shap Summary Plot')
 
@@ -407,7 +433,7 @@ df['AMT_GOODS_PRICE'] = 200458.1548
 df['FLAG_LAST_APPL_PER_CONTRACT'] = 1.0
 df['NFLAG_LAST_APPL_IN_DAY'] = 1.0
 df['NAME_CASH_LOAN_PURPOSE'] = 22.64
-df['NAME_CONTRACT_STATUS'] = 0.416
+df['NAME_CONTRACT_STATUS'] =0.416
 df['DAYS_DECISION'] = -899.8
 df['NAME_PAYMENT_TYPE'] = 1.02
 df['CODE_REJECT_REASON'] = 6.19
@@ -441,8 +467,3 @@ if submit:
   else:
     st.write(f'Prediction: {pred}')
     st.write('Home Credit is not Default')
-
-
-
-
-
