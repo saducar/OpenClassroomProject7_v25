@@ -79,7 +79,7 @@ df = load_data(dataset)
 corr = df.corr().abs()
 sns.heatmap(corr, cmap=plt.cm.RdYlBu_r, vmin=-0.25, annot=True, vmax=0.6)
 plt.title('Correlation Heatmap')
-plt.savefig("./images/"+dataset+".png")
+#plt.savefig("./images/"+dataset+".png")
 st.pyplot(fig3)
 
 # Pie Chart
@@ -97,7 +97,7 @@ plt.pie(sizes, labels=labels,
         explode = [0, 0.1])
 
 plt.axis('equal')
-plt.savefig("./images/PieChart.png")
+#plt.savefig("./images/PieChart.png")
 st.pyplot(fig4)
 
 # Credit Amount 
@@ -105,7 +105,7 @@ st.pyplot(fig4)
 st.write('Credit Amount')
 amtCredit=result.sort_values(by='AMT_CREDIT', ascending=False)[['SK_ID_CURR', 'AMT_CREDIT']]
 amtCredit.set_index('SK_ID_CURR')[:20].plot.barh(figsize=(10, 10))
-plt.savefig("./images/CreditAmount.png")
+#plt.savefig("./images/CreditAmount.png")
 plt.show()
 st.pyplot()
 
@@ -127,7 +127,7 @@ fig5 = plt.figure(figsize = (10, 5))
 plt.plot(data["Age_cat"], data["AMT_INCOME_TOTAL"], color="blue")
 # result.groupby(['Age(years)','AMT_INCOME_TOTAL']).sum().unstack().plot()
 plt.title("Age(years) vs Amount of Income")
-plt.savefig("./images/" + "AGE_AMT_OF_INCOME" + ".png")
+#plt.savefig("./images/" + "AGE_AMT_OF_INCOME" + ".png")
 # plt.show()
 st.pyplot(fig5)
 #
@@ -136,7 +136,7 @@ st.write("Age vs Total Amount Credit")
 fig6 = plt.figure(figsize=(10, 5))
 plt.plot(data["Age_cat"], data["AMT_CREDIT"], color="red")
 plt.title("Age(years) vs Amount of Credit")
-plt.savefig("./images/" + "AGE_AMT_OF_CREDIT" + ".png")
+#plt.savefig("./images/" + "AGE_AMT_OF_CREDIT" + ".png")
 # plt.show()
 st.pyplot(fig6)
 #
@@ -145,7 +145,7 @@ st.write("Age vs Flag Own Realty")
 fig7 = plt.figure(figsize=(10, 5))
 plt.plot(data["Age_cat"], data["FLAG_OWN_REALTY"], color="green")
 plt.title("Age(years) vs Flag Own Realty")
-plt.savefig("./images/" + "AGE_FLAG_OWN_REALITY" + ".png")
+#plt.savefig("./images/" + "AGE_FLAG_OWN_REALITY" + ".png")
 # plt.show()
 st.pyplot(fig7)
 #
@@ -153,7 +153,7 @@ st.write("Age vs Days Employed")
 fig8 = plt.figure(figsize=(10, 5))
 plt.plot(data2["Age_cat"], data2["DAYS_EMPLOYED"], color="violet")
 plt.title("Age(years) vs Days Employed")
-plt.savefig("./images/" + "AGE_DAYS_EMPLOYED" + ".png")
+#plt.savefig("./images/" + "AGE_DAYS_EMPLOYED" + ".png")
 plt.show()
 st.pyplot(fig8)
 
@@ -201,7 +201,7 @@ try:
         fig9 = plt.figure(figsize=(10, 5))
         plt.barh(temp.index, temp[temp.columns[0]], color=plt.cm.Accent_r(np.arange(len(temp))))
         plt.title(key)
-        plt.savefig("./images/"+key+".png")
+        #plt.savefig("./images/"+key+".png")
         plt.show()
         st.pyplot(fig9)
 
@@ -216,7 +216,7 @@ try:
             plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_INCOME_TOTAL"]+10000)
             # result.groupby(['Age(years)','AMT_INCOME_TOTAL']).sum().unstack().plot()
             plt.title("Age Groups vs Average Amount of Income")
-            plt.savefig("./images/" + "AVG_AGE_AMT_OF_INCOME_BAR" + ".png")
+            #plt.savefig("./images/" + "AVG_AGE_AMT_OF_INCOME_BAR" + ".png")
             plt.show()
             st.pyplot(fig10)
 
@@ -226,7 +226,7 @@ try:
             plt.hlines(y=client["AMT_CREDIT"], xmin=0, xmax="60-70")
             plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_CREDIT"]+10000)
             plt.title("Age Groups vs Average Amount of Credit")
-            plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
+            #plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
             plt.show()
             st.pyplot(fig11)
         
