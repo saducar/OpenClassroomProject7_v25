@@ -206,6 +206,8 @@ result_plots = st.button('Result Plots')
 
 if result_plots:
     
+    is_default = False
+    
     try:
         result['SK_ID_CURR'] = result['SK_ID_CURR'].astype('str')
         result['DAYS_BIRTH'] = abs(result['DAYS_BIRTH'])
@@ -485,25 +487,25 @@ if pred:
     df['AMT_APPLICATION_PERCENT'] = 5.477633
     df['AMT_GOODS_PRICE_PERCENT'] = 4.367816
 
-df = st.button('Create DataFrame')
+    df = st.button('Create DataFrame')
 
-if df:
-    st.write(df)
+    if df:
+        st.write(df)
 
-df_json = df.to_json(orient = "records")
-url = 'https://apipredictions.herokuapp.com/predict'
-r = requests.post(url, json=json.loads(df_json))
-r = r.json()[0]
-pred = r['pred_proba']
-pred = np.round(pred,3)
+    df_json = df.to_json(orient = "records")
+    url = 'https://apipredictions.herokuapp.com/predict'
+    r = requests.post(url, json=json.loads(df_json))
+    r = r.json()[0]
+    pred = r['pred_proba']
+    pred = np.round(pred,3)
 
-submit = st.button('Predict')
+    submit = st.button('Predict')
 
-if submit:
+    if submit:
 
-  if pred>=0.5:
-    st.write(f'Prediction: {pred}')
-    st.write('Home Credit is Default')
-  else:
-    st.write(f'Prediction: {pred}')
-    st.write('Home Credit is not Default')
+      if pred>=0.5:
+        st.write(f'Prediction: {pred}')
+        st.write('Home Credit is Default')
+      else:
+        st.write(f'Prediction: {pred}')
+        st.write('Home Credit is not Default')
