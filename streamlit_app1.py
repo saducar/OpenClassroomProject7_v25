@@ -129,9 +129,9 @@ try:
     st.write(f'The client {id} has a {str(round(prob, 1))}% risk of defaulting on their loan.')
 
     if prob < 80:
-      st.write('The client will not get credit')
+      st.write('The client will not get credit.')
     else:
-        st.write('The client will get credit')
+        st.write('The client will get credit.')
 except:
     pass
 
