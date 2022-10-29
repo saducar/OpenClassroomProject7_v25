@@ -18,7 +18,6 @@ def load_data(file):
     return df
 
 train_df = load_data('train_data')
-result = load_data('results')
 
 st.subheader('Distribution of Variables')
 variables = st.selectbox(
@@ -69,6 +68,3 @@ sns.heatmap(corr, cmap=plt.cm.RdYlBu_r, vmin=-0.25, annot=True, vmax=0.6)
 plt.title('Correlation Heatmap')
 #plt.savefig("./images/"+dataset+".png")
 st.pyplot(fig3)
-
-
-
