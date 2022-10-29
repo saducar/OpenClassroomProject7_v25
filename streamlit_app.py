@@ -62,19 +62,15 @@ variable2 = st.selectbox(
   ('DAYS_BIRTH', 'AMT_ANNUITY_x','EXT_SOURCE_2', 'EXT_SOURCE_3', 'CREDIT_INCOME_PERCENT', 
   'AMT_CREDIT','AMT_APPLICATION_PERCENT','FLAG_OWN_REALTY','AMT_INCOME_TOTAL','NAME_EDUCATION_TYPE',
   'DAYS_EMPLOYED','AMT_GOODS_PRICE_PERCENT'))
-
-scatter_plt = st.button('Scatter Plot')
-
-if scatter_plt:
     
-    fig2 = plt.figure(figsize=(10,8))
-    sns.scatterplot(data=train_df, x=variable1, y=variable2, hue="TARGET")
-    plt.legend()
-    plt.xlabel(variable1)
-    plt.ylabel(variable2)
-    plt.title(f'Scatter plot between the {variable1} and {variable2} by target value')
-    plt.close()
-    st.pyplot(fig2)
+fig2 = plt.figure(figsize=(10,8))
+sns.scatterplot(data=train_df, x=variable1, y=variable2, hue="TARGET")
+plt.legend()
+plt.xlabel(variable1)
+plt.ylabel(variable2)
+plt.title(f'Scatter plot between the {variable1} and {variable2} by target value')
+plt.close()
+st.pyplot(fig2)
 
 st.subheader('Correlation Heatmaps')
 
