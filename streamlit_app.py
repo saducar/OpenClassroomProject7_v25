@@ -260,107 +260,104 @@ except:
 
 ## Lime and Shap plots
    
-lime_shap = st.button('LIME & SHAP Plots')
 
-if lime_shap:
-    
-    st.subheader('Lime and Shap plots')
+st.subheader('Lime and Shap plots')
 
-    cat_cols = ['NAME_CONTRACT_TYPE_x','CODE_GENDER','FLAG_OWN_CAR', 'FLAG_OWN_REALTY','CNT_CHILDREN','NAME_TYPE_SUITE','NAME_INCOME_TYPE','NAME_EDUCATION_TYPE',
-                'NAME_FAMILY_STATUS','NAME_HOUSING_TYPE','FLAG_MOBIL','FLAG_WORK_PHONE','FLAG_CONT_MOBILE','FLAG_PHONE','FLAG_EMAIL',
-                'FLAG_EMAIL','REGION_RATING_CLIENT','WEEKDAY_APPR_PROCESS_START_x','HOUR_APPR_PROCESS_START_x','REG_REGION_NOT_LIVE_REGION','REG_REGION_NOT_WORK_REGION','LIVE_REGION_NOT_WORK_REGION','REG_CITY_NOT_LIVE_CITY','REG_CITY_NOT_WORK_CITY',
-                'LIVE_CITY_NOT_WORK_CITY','FLAG_DOCUMENT_2','FLAG_DOCUMENT_3','FLAG_DOCUMENT_4','FLAG_DOCUMENT_5','FLAG_DOCUMENT_6','FLAG_DOCUMENT_7','FLAG_DOCUMENT_8','FLAG_DOCUMENT_9',
-                 'FLAG_DOCUMENT_10','FLAG_DOCUMENT_11','FLAG_DOCUMENT_12','FLAG_DOCUMENT_13','FLAG_DOCUMENT_14','FLAG_DOCUMENT_15',
-                'FLAG_DOCUMENT_16','FLAG_DOCUMENT_17','FLAG_DOCUMENT_18','FLAG_DOCUMENT_19','FLAG_DOCUMENT_20','FLAG_DOCUMENT_21','FLAG_LAST_APPL_PER_CONTRACT','NAME_CONTRACT_TYPE_y',
-                'NFLAG_LAST_APPL_IN_DAY']
+cat_cols = ['NAME_CONTRACT_TYPE_x','CODE_GENDER','FLAG_OWN_CAR', 'FLAG_OWN_REALTY','CNT_CHILDREN','NAME_TYPE_SUITE','NAME_INCOME_TYPE','NAME_EDUCATION_TYPE',
+            'NAME_FAMILY_STATUS','NAME_HOUSING_TYPE','FLAG_MOBIL','FLAG_WORK_PHONE','FLAG_CONT_MOBILE','FLAG_PHONE','FLAG_EMAIL',
+            'FLAG_EMAIL','REGION_RATING_CLIENT','WEEKDAY_APPR_PROCESS_START_x','HOUR_APPR_PROCESS_START_x','REG_REGION_NOT_LIVE_REGION','REG_REGION_NOT_WORK_REGION','LIVE_REGION_NOT_WORK_REGION','REG_CITY_NOT_LIVE_CITY','REG_CITY_NOT_WORK_CITY',
+            'LIVE_CITY_NOT_WORK_CITY','FLAG_DOCUMENT_2','FLAG_DOCUMENT_3','FLAG_DOCUMENT_4','FLAG_DOCUMENT_5','FLAG_DOCUMENT_6','FLAG_DOCUMENT_7','FLAG_DOCUMENT_8','FLAG_DOCUMENT_9',
+             'FLAG_DOCUMENT_10','FLAG_DOCUMENT_11','FLAG_DOCUMENT_12','FLAG_DOCUMENT_13','FLAG_DOCUMENT_14','FLAG_DOCUMENT_15',
+            'FLAG_DOCUMENT_16','FLAG_DOCUMENT_17','FLAG_DOCUMENT_18','FLAG_DOCUMENT_19','FLAG_DOCUMENT_20','FLAG_DOCUMENT_21','FLAG_LAST_APPL_PER_CONTRACT','NAME_CONTRACT_TYPE_y',
+            'NFLAG_LAST_APPL_IN_DAY']
 
-    num_cols = ['AMT_INCOME_TOTAL','AMT_CREDIT','AMT_ANNUITY_x','REGION_POPULATION_RELATIVE','DAYS_BIRTH','DAYS_EMPLOYED','DAYS_REGISTRATION',
-                'DAYS_ID_PUBLISH','CNT_FAM_MEMBERS','EXT_SOURCE_2','EXT_SOURCE_3','OBS_30_CNT_SOCIAL_CIRCLE','DEF_30_CNT_SOCIAL_CIRCLE','DEF_60_CNT_SOCIAL_CIRCLE','DAYS_LAST_PHONE_CHANGE','AMT_REQ_CREDIT_BUREAU_HOUR',
-                'AMT_REQ_CREDIT_BUREAU_DAY','AMT_REQ_CREDIT_BUREAU_WEEK','AMT_REQ_CREDIT_BUREAU_MON','AMT_REQ_CREDIT_BUREAU_QRT','AMT_REQ_CREDIT_BUREAU_YEAR','AMT_ANNUITY_y','AMT_APPLICATION','AMT_GOODS_PRICE',
-                'NAME_CASH_LOAN_PURPOSE','NAME_CONTRACT_STATUS','DAYS_DECISION','NAME_PAYMENT_TYPE','CODE_REJECT_REASON','NAME_CLIENT_TYPE','NAME_GOODS_CATEGORY','NAME_PORTFOLIO','NAME_PRODUCT_TYPE','SELLERPLACE_AREA',
-                'CNT_PAYMENT','NAME_YIELD_GROUP','AMT_CREDIT_PERCENT','AMT_APPLICATION_PERCENT','AMT_GOODS_PRICE_PERCENT']
+num_cols = ['AMT_INCOME_TOTAL','AMT_CREDIT','AMT_ANNUITY_x','REGION_POPULATION_RELATIVE','DAYS_BIRTH','DAYS_EMPLOYED','DAYS_REGISTRATION',
+            'DAYS_ID_PUBLISH','CNT_FAM_MEMBERS','EXT_SOURCE_2','EXT_SOURCE_3','OBS_30_CNT_SOCIAL_CIRCLE','DEF_30_CNT_SOCIAL_CIRCLE','DEF_60_CNT_SOCIAL_CIRCLE','DAYS_LAST_PHONE_CHANGE','AMT_REQ_CREDIT_BUREAU_HOUR',
+            'AMT_REQ_CREDIT_BUREAU_DAY','AMT_REQ_CREDIT_BUREAU_WEEK','AMT_REQ_CREDIT_BUREAU_MON','AMT_REQ_CREDIT_BUREAU_QRT','AMT_REQ_CREDIT_BUREAU_YEAR','AMT_ANNUITY_y','AMT_APPLICATION','AMT_GOODS_PRICE',
+            'NAME_CASH_LOAN_PURPOSE','NAME_CONTRACT_STATUS','DAYS_DECISION','NAME_PAYMENT_TYPE','CODE_REJECT_REASON','NAME_CLIENT_TYPE','NAME_GOODS_CATEGORY','NAME_PORTFOLIO','NAME_PRODUCT_TYPE','SELLERPLACE_AREA',
+            'CNT_PAYMENT','NAME_YIELD_GROUP','AMT_CREDIT_PERCENT','AMT_APPLICATION_PERCENT','AMT_GOODS_PRICE_PERCENT']
 
-    # Creating column transformer to select all column names that has Binary & a list for non Binary.
+# Creating column transformer to select all column names that has Binary & a list for non Binary.
 
-    # Define categorical pipeline for imputing the missing values
-    cat_pipe = Pipeline([
-        ('imputer', SimpleImputer(strategy='most_frequent'))
-    ])
+# Define categorical pipeline for imputing the missing values
+cat_pipe = Pipeline([
+    ('imputer', SimpleImputer(strategy='most_frequent'))
+])
 
-    # Define numerical pipeline for imputing the missing values
-    num_pipe = Pipeline([
-        ('imputer', SimpleImputer(strategy='mean')),
-        ('scaler', MinMaxScaler())
-    ])
+# Define numerical pipeline for imputing the missing values
+num_pipe = Pipeline([
+    ('imputer', SimpleImputer(strategy='mean')),
+    ('scaler', MinMaxScaler())
+])
 
-    # Combine categorical and numerical pipelines for column transformer
-    preprocessor = ColumnTransformer([
-        ('cat', cat_pipe, cat_cols),
-        ('num', num_pipe, num_cols)
-    ])
+# Combine categorical and numerical pipelines for column transformer
+preprocessor = ColumnTransformer([
+    ('cat', cat_pipe, cat_cols),
+    ('num', num_pipe, num_cols)
+])
 
-    X = train_df.drop(['Unnamed: 0', 'Unnamed: 0.1','TARGET'],axis=1)
-    y = train_df['TARGET']
+X = train_df.drop(['Unnamed: 0', 'Unnamed: 0.1','TARGET'],axis=1)
+y = train_df['TARGET']
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    import lightgbm as lgb
+import lightgbm as lgb
 
-    lb = lgb.LGBMClassifier(class_weight='balanced',n_estimators=300,learning_rate=0.05)
+lb = lgb.LGBMClassifier(class_weight='balanced',n_estimators=300,learning_rate=0.05)
 
-    pipe_lb = Pipeline([
-        ('preprocess', preprocessor),('model',lb)
-    ])
+pipe_lb = Pipeline([
+    ('preprocess', preprocessor),('model',lb)
+])
 
-    pipe_lb.fit(X_train,y_train)
+pipe_lb.fit(X_train,y_train)
 
-    ## Applying the LIME for LightGBM
-    pipe = Pipeline([('preprocessor', preprocessor)]) 
-    train_data = pipe.fit_transform(X_train)
-    test_data = pipe.fit_transform(X_test)
+## Applying the LIME for LightGBM
+pipe = Pipeline([('preprocessor', preprocessor)]) 
+train_data = pipe.fit_transform(X_train)
+test_data = pipe.fit_transform(X_test)
 
-    st.subheader('Lime Explanation Plot')
+st.subheader('Lime Explanation Plot')
 
-    class_names = [0, 1]
-    #instantiate the explanations for the data set
-    limeexplainer = LimeTabularExplainer(train_data, class_names=class_names, feature_names = X_train.columns, discretize_continuous = False)
-    result_df = result[result['SK_ID_CURR']==id]
-    idx=result.index[0] # the rows of the dataset
-    exp = limeexplainer.explain_instance(test_data[idx], lb.predict_proba, num_features=10, labels=class_names)
-    components.html(exp.as_html(), height=800)
-    
-    st.subheader("Shap Explanation plots") 
+class_names = [0, 1]
+#instantiate the explanations for the data set
+limeexplainer = LimeTabularExplainer(train_data, class_names=class_names, feature_names = X_train.columns, discretize_continuous = False)
+result_df = result[result['SK_ID_CURR']==id]
+idx=result.index[0] # the rows of the dataset
+exp = limeexplainer.explain_instance(test_data[idx], lb.predict_proba, num_features=10, labels=class_names)
+components.html(exp.as_html(), height=800)
 
-    sub_sampled_train_data = shap.sample(train_data, 10000, random_state=0) # use 1000 samples of train data as background data
+st.subheader("Shap Explanation plots") 
 
-    subsampled_test_data = test_data[idx].reshape(1,-1)
+sub_sampled_train_data = shap.sample(train_data, 10000, random_state=0) # use 1000 samples of train data as background data
 
-    # explain first sample from test data
-    start_time = time.time()
-    explainer = shap.TreeExplainer(lb)
-    shap_values = explainer.shap_values(subsampled_test_data)
-    elapsed_time = time.time() - start_time
+subsampled_test_data = test_data[idx].reshape(1,-1)
 
-    st.write('Shap Force Plot')
+# explain first sample from test data
+start_time = time.time()
+explainer = shap.TreeExplainer(lb)
+shap_values = explainer.shap_values(subsampled_test_data)
+elapsed_time = time.time() - start_time
 
-    st.write(f"Tree Explainer SHAP run time for lightgbm is {round(elapsed_time,3)} in seconds")
-    st.write(f"SHAP expected value: {[explainer.expected_value]}")
-    st.write(f"Model mean value : {[lb.predict_proba(train_data).mean(axis=0)]}")
-    st.write(f"Model prediction for test data : {[lb.predict_proba(subsampled_test_data)]}")
+st.write('Shap Force Plot')
 
-    try:
+st.write(f"Tree Explainer SHAP run time for lightgbm is {round(elapsed_time,3)} in seconds")
+st.write(f"SHAP expected value: {[explainer.expected_value]}")
+st.write(f"Model mean value : {[lb.predict_proba(train_data).mean(axis=0)]}")
+st.write(f"Model prediction for test data : {[lb.predict_proba(subsampled_test_data)]}")
 
-       force_plot = shap.force_plot(explainer.expected_value[1], shap_values[1][0], subsampled_test_data[idx], feature_names=X_train.columns, matplotlib=True, show=False)
-       st.pyplot(force_plot)
+try:
 
-    except:
-       st.write("Error due to index out of bounds")
+   force_plot = shap.force_plot(explainer.expected_value[1], shap_values[1][0], subsampled_test_data[idx], feature_names=X_train.columns, matplotlib=True, show=False)
+   st.pyplot(force_plot)
 
-    st.write('Shap Summary Plot')
+except:
+   st.write("Error due to index out of bounds")
 
-    fig, ax = plt.subplots(nrows=1, ncols=1)
-    shap.summary_plot(shap_values, subsampled_test_data, feature_names=X_train.columns, max_display=10)
-    st.pyplot(fig)
+st.write('Shap Summary Plot')
+
+fig, ax = plt.subplots(nrows=1, ncols=1)
+shap.summary_plot(shap_values, subsampled_test_data, feature_names=X_train.columns, max_display=10)
+st.pyplot(fig)
 
 pred = st.button('Predictions')
 
