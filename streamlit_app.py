@@ -39,16 +39,16 @@ variables = st.selectbox(
   'AMT_CREDIT','AMT_APPLICATION_PERCENT','FLAG_OWN_REALTY','AMT_INCOME_TOTAL','NAME_EDUCATION_TYPE',
   'DAYS_EMPLOYED','AMT_GOODS_PRICE_PERCENT'))
     
-    fig1 = plt.figure(figsize=(10,8))
-    train_df[variables]=train_df[variables].abs()
-    sns.kdeplot(train_df.loc[train_df['TARGET']==0,variables]/365,label='target==0')
-    sns.kdeplot(train_df.loc[train_df['TARGET']==1,variables]/365,label='target==1')
-    plt.legend()
-    plt.xlabel(variables)
-    plt.ylabel('Density')
-    plt.title(f'Distribution of {variables} by target value')
-    plt.close()
-    st.pyplot(fig1)
+fig1 = plt.figure(figsize=(10,8))
+train_df[variables]=train_df[variables].abs()
+sns.kdeplot(train_df.loc[train_df['TARGET']==0,variables]/365,label='target==0')
+sns.kdeplot(train_df.loc[train_df['TARGET']==1,variables]/365,label='target==1')
+plt.legend()
+plt.xlabel(variables)
+plt.ylabel('Density')
+plt.title(f'Distribution of {variables} by target value')
+plt.close()
+st.pyplot(fig1)
 
 st.subheader('Scatter plots between Variables')
 
@@ -350,6 +350,7 @@ shap.summary_plot(shap_values, subsampled_test_data, feature_names=X_train.colum
 st.pyplot(fig)
     
 st.subheader('Predicting the credit is default or not')
+
 # Utility function
 def yes_no(value):
     if value=="Yes":
@@ -462,11 +463,6 @@ df['NAME_YIELD_GROUP'] = 1.97
 df['AMT_CREDIT_PERCENT'] = 3.167544
 df['AMT_APPLICATION_PERCENT'] = 5.477633
 df['AMT_GOODS_PRICE_PERCENT'] = 4.367816
-
-df = st.button('Create DataFrame')
-
-if df:
-    st.write(df)
 
 df_json = df.to_json(orient = "records")
 url = 'https://apipredictions.herokuapp.com/predict'
