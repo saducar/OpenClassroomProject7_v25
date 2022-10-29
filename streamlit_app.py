@@ -38,10 +38,6 @@ variables = st.selectbox(
   ('DAYS_BIRTH', 'AMT_ANNUITY_x','EXT_SOURCE_2', 'EXT_SOURCE_3', 'AMT_CREDIT_PERCENT', 
   'AMT_CREDIT','AMT_APPLICATION_PERCENT','FLAG_OWN_REALTY','AMT_INCOME_TOTAL','NAME_EDUCATION_TYPE',
   'DAYS_EMPLOYED','AMT_GOODS_PRICE_PERCENT'))
-
-density_plt = st.button('Density Plot')
-
-if density_plt:
     
     fig1 = plt.figure(figsize=(10,8))
     train_df[variables]=train_df[variables].abs()
@@ -86,18 +82,14 @@ dataset = st.selectbox(
   'Choose data for Correlation Heatmap',
   ('Credit_Card_Balance', 'Installments_Payments', 'Previous_Application'))
 
-heatmap_plt = st.button('Correlation Heatmap')
-
-if heatmap_plt:
-    
-    fig3 = plt.figure(figsize=(20,15))
-    df = load_data(dataset)
-    corr = df.corr().abs()
-    sns.heatmap(corr, cmap=plt.cm.RdYlBu_r, vmin=-0.25, annot=True, vmax=0.6)
-    plt.title('Correlation Heatmap')
-    #plt.savefig("./images/"+dataset+".png")
-    plt.close()
-    st.pyplot(fig3)
+fig3 = plt.figure(figsize=(20,15))
+df = load_data(dataset)
+corr = df.corr().abs()
+sns.heatmap(corr, cmap=plt.cm.RdYlBu_r, vmin=-0.25, annot=True, vmax=0.6)
+plt.title('Correlation Heatmap')
+#plt.savefig("./images/"+dataset+".png")
+plt.close()
+st.pyplot(fig3)
 
 # Pie Chart
 
