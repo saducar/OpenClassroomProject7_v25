@@ -260,7 +260,6 @@ except:
 
 ## Lime and Shap plots
    
-
 st.subheader('Lime and Shap plots')
 
 cat_cols = ['NAME_CONTRACT_TYPE_x','CODE_GENDER','FLAG_OWN_CAR', 'FLAG_OWN_REALTY','CNT_CHILDREN','NAME_TYPE_SUITE','NAME_INCOME_TYPE','NAME_EDUCATION_TYPE',
