@@ -189,7 +189,7 @@ if result_plts:
                 plt.show()
                 st.pyplot(fig11)
 
-          except:
+           except:
               print('Please enter client ID again')
 
 #         sameClass = result[result['Class']==int(client['Class'].values[0])]
