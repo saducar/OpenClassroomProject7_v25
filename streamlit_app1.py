@@ -122,75 +122,71 @@ result_plts = st.button('Result Plots')
 
 if result_plts:
 
-        try:
+        id = st.text_input('Enter Client ID:')
+        #id=394688
+        prob = result.loc[result['SK_ID_CURR']==id]['TARGET'].values[0]*100
+        st.write(f'The client {id} has a {str(round(prob, 1))}% risk of defaulting on their loan.')
 
-            id = st.text_input('Enter Client ID:')
-            #id=394688
-            prob = result.loc[result['SK_ID_CURR']==id]['TARGET'].values[0]*100
-            st.write(f'The client {id} has a {str(round(prob, 1))}% risk of defaulting on their loan.')
+        if prob < 80:
 
-            if prob < 80:
-                
-                st.write('The client will not get credit.')
-                result['SK_ID_CURR'] = result['SK_ID_CURR'].astype('str')
-                result['DAYS_BIRTH'] = abs(result['DAYS_BIRTH'])
-                client = result[result['SK_ID_CURR']==id]
+            st.write('The client will not get credit.')
+            result['SK_ID_CURR'] = result['SK_ID_CURR'].astype('str')
+            result['DAYS_BIRTH'] = abs(result['DAYS_BIRTH'])
+            client = result[result['SK_ID_CURR']==id]
 
-                st.write("Age Vs Amount Income")
-                fig10 = plt.figure(figsize=(10, 5))
-                # fig_1, ax_1 = plt.subplots()
+            st.write("Age Vs Amount Income")
+            fig10 = plt.figure(figsize=(10, 5))
+            # fig_1, ax_1 = plt.subplots()
 
-                plt.bar(data["Age_cat"], data["AMT_INCOME_TOTAL"], color="blue")
-                plt.hlines(y=client["AMT_INCOME_TOTAL"], xmin=0, xmax="60-70")
-                plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_INCOME_TOTAL"]+10000)
-                # result.groupby(['Age(years)','AMT_INCOME_TOTAL']).sum().unstack().plot()
-                plt.title("Age Groups vs Average Amount of Income")
-                #plt.savefig("./images/" + "AVG_AGE_AMT_OF_INCOME_BAR" + ".png")
-                plt.show()
-                st.pyplot(fig10)
+            plt.bar(data["Age_cat"], data["AMT_INCOME_TOTAL"], color="blue")
+            plt.hlines(y=client["AMT_INCOME_TOTAL"], xmin=0, xmax="60-70")
+            plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_INCOME_TOTAL"]+10000)
+            # result.groupby(['Age(years)','AMT_INCOME_TOTAL']).sum().unstack().plot()
+            plt.title("Age Groups vs Average Amount of Income")
+            #plt.savefig("./images/" + "AVG_AGE_AMT_OF_INCOME_BAR" + ".png")
+            plt.show()
+            st.pyplot(fig10)
 
-                st.write("Age vs Total Amount Credit")
-                fig11 = plt.figure(figsize=(10, 5))
-                plt.bar(data["Age_cat"], data["AMT_CREDIT"], color="red")
-                plt.hlines(y=client["AMT_CREDIT"], xmin=0, xmax="60-70")
-                plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_CREDIT"]+10000)
-                plt.title("Age Groups vs Average Amount of Credit")
-                #plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
-                plt.show()
-                st.pyplot(fig11)
+            st.write("Age vs Total Amount Credit")
+            fig11 = plt.figure(figsize=(10, 5))
+            plt.bar(data["Age_cat"], data["AMT_CREDIT"], color="red")
+            plt.hlines(y=client["AMT_CREDIT"], xmin=0, xmax="60-70")
+            plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_CREDIT"]+10000)
+            plt.title("Age Groups vs Average Amount of Credit")
+            #plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
+            plt.show()
+            st.pyplot(fig11)
 
-            else:
-                
-                st.write('The client will get credit.')
-                result['SK_ID_CURR'] = result['SK_ID_CURR'].astype('str')
-                result['DAYS_BIRTH'] = abs(result['DAYS_BIRTH'])
-                client = result[result['SK_ID_CURR']==id]
+        else:
 
-                st.write("Age Vs Amount Income")
-                fig10 = plt.figure(figsize=(10, 5))
-                # fig_1, ax_1 = plt.subplots()
+            st.write('The client will get credit.')
+            result['SK_ID_CURR'] = result['SK_ID_CURR'].astype('str')
+            result['DAYS_BIRTH'] = abs(result['DAYS_BIRTH'])
+            client = result[result['SK_ID_CURR']==id]
 
-                plt.bar(data["Age_cat"], data["AMT_INCOME_TOTAL"], color="blue")
-                plt.hlines(y=client["AMT_INCOME_TOTAL"], xmin=0, xmax="60-70")
-                plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_INCOME_TOTAL"]+10000)
-                # result.groupby(['Age(years)','AMT_INCOME_TOTAL']).sum().unstack().plot()
-                plt.title("Age Groups vs Average Amount of Income")
-                #plt.savefig("./images/" + "AVG_AGE_AMT_OF_INCOME_BAR" + ".png")
-                plt.show()
-                st.pyplot(fig10)
+            st.write("Age Vs Amount Income")
+            fig10 = plt.figure(figsize=(10, 5))
+            # fig_1, ax_1 = plt.subplots()
 
-                st.write("Age vs Total Amount Credit")
-                fig11 = plt.figure(figsize=(10, 5))
-                plt.bar(data["Age_cat"], data["AMT_CREDIT"], color="red")
-                plt.hlines(y=client["AMT_CREDIT"], xmin=0, xmax="60-70")
-                plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_CREDIT"]+10000)
-                plt.title("Age Groups vs Average Amount of Credit")
-                #plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
-                plt.show()
-                st.pyplot(fig11)
+            plt.bar(data["Age_cat"], data["AMT_INCOME_TOTAL"], color="blue")
+            plt.hlines(y=client["AMT_INCOME_TOTAL"], xmin=0, xmax="60-70")
+            plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_INCOME_TOTAL"]+10000)
+            # result.groupby(['Age(years)','AMT_INCOME_TOTAL']).sum().unstack().plot()
+            plt.title("Age Groups vs Average Amount of Income")
+            #plt.savefig("./images/" + "AVG_AGE_AMT_OF_INCOME_BAR" + ".png")
+            plt.show()
+            st.pyplot(fig10)
 
-           except:
-              print('Please enter client ID again')
+            st.write("Age vs Total Amount Credit")
+            fig11 = plt.figure(figsize=(10, 5))
+            plt.bar(data["Age_cat"], data["AMT_CREDIT"], color="red")
+            plt.hlines(y=client["AMT_CREDIT"], xmin=0, xmax="60-70")
+            plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_CREDIT"]+10000)
+            plt.title("Age Groups vs Average Amount of Credit")
+            #plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
+            plt.show()
+            st.pyplot(fig11)
+
 
 #         sameClass = result[result['Class']==int(client['Class'].values[0])]
 #         if int(client['Class'])==1:
