@@ -199,10 +199,7 @@ st.subheader('Lime and Shap plots')
 
 # Creating column transformer to select all column names that has Binary & a list for non Binary.
 
-
-
-
-X = result.drop(['Unnamed: 0', 'Unnamed: 0.1','TARGET'],axis=1)
+X = result.drop(['Unnamed: 0','TARGET'],axis=1)
 y = result['Class']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
