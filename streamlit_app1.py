@@ -135,32 +135,9 @@ if result_plts:
         else:
             st.write('The client will get credit.')
             
-        result['SK_ID_CURR'] = result['SK_ID_CURR'].astype('str')
-        result['DAYS_BIRTH'] = abs(result['DAYS_BIRTH'])
-        client = result[result['SK_ID_CURR']==id]
-        
-        sameClass = result[result['Class']==int(client['Class'].values[0])]
-        if int(client['Class'])==1:
-            oppClass=result[result['Class']==0]
-        else:
-            oppClass=result[result['Class']==1]
-
-        for key, val in focus.items():
-
-            temp = pd.DataFrame(columns=['Target','Average','SameGroup','OppGroup'])
-            temp['Target']=client[key]
-            temp['Average']=np.average(result[key].values)
-            temp['SameGroup']=np.average(sameClass[key].values)
-            temp['OppGroup']=np.average(oppClass[key].values)
-            temp = temp.T
-            fig9 = plt.figure(figsize=(10, 5))
-            plt.barh(temp.index, temp[temp.columns[0]], color=plt.cm.Accent_r(np.arange(len(temp))))
-            plt.title(key)
-            #plt.savefig("./images/"+key+".png")
-            plt.show()
-            st.pyplot(fig9)
-
-        if prob >=50:
+            result['SK_ID_CURR'] = result['SK_ID_CURR'].astype('str')
+            result['DAYS_BIRTH'] = abs(result['DAYS_BIRTH'])
+            client = result[result['SK_ID_CURR']==id]
 
             st.write("Age Vs Amount Income")
             fig10 = plt.figure(figsize=(10, 5))
@@ -184,9 +161,28 @@ if result_plts:
             #plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
             plt.show()
             st.pyplot(fig11)
-        else:
-           pass
-        
+   
+#         sameClass = result[result['Class']==int(client['Class'].values[0])]
+#         if int(client['Class'])==1:
+#             oppClass=result[result['Class']==0]
+#         else:
+#             oppClass=result[result['Class']==1]
+
+#         for key, val in focus.items():
+
+#             temp = pd.DataFrame(columns=['Target','Average','SameGroup','OppGroup'])
+#             temp['Target']=client[key]
+#             temp['Average']=np.average(result[key].values)
+#             temp['SameGroup']=np.average(sameClass[key].values)
+#             temp['OppGroup']=np.average(oppClass[key].values)
+#             temp = temp.T
+#             fig9 = plt.figure(figsize=(10, 5))
+#             plt.barh(temp.index, temp[temp.columns[0]], color=plt.cm.Accent_r(np.arange(len(temp))))
+#             plt.title(key)
+#             #plt.savefig("./images/"+key+".png")
+#             plt.show()
+#             st.pyplot(fig9)
+
     except:
         print('Please enter client ID again')
 
