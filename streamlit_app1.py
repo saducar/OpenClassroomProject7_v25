@@ -186,8 +186,8 @@ if result_plts:
             #plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
             plt.show()
             st.pyplot(fig11)
-       else:
-          pass
+        else:
+           pass
         
     except:
         print('Please enter client ID again')
