@@ -140,7 +140,8 @@ if result_plts:
     try:
 
         st.subheader('Result Plots')
-        proba = result.loc[result['SK_ID_CURR']==id]['TARGET'].values[0]*100
+        
+#         proba = result.loc[result['SK_ID_CURR']==id]['TARGET'].values[0]*100
 
         if proba >=50:
 
