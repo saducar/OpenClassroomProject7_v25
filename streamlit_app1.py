@@ -239,12 +239,12 @@ test_data = pipe.fit_transform(x_test)
 
 model = pickle.load(open('./data/lgbmodel.pkl', 'rb'))
 
-x_df = result[result['SK_ID_CURR']==id]
-idx = x_df.index[0] # the rows of the dataset
-
 ## Applying the LIME for LightGBM
 try:
     
+    x_df = result[result['SK_ID_CURR']==id]
+    idx = x_df.index[0] # the rows of the dataset
+
     st.subheader('Lime Explanation Plot')
 
     class_names = [0, 1]
