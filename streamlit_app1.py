@@ -118,47 +118,51 @@ focus={'AMT_CREDIT_PERCENT': "the average between the loan and the income",
 
 st.write(focus)
 
-st.subheader('Result Plots')
-is_default = False
+result_plts = st.button('Result Plots')
 
-try:
-    id = st.text_input('Enter Client ID:')
-    #id=394688
-    prob = result.loc[result['SK_ID_CURR']==id]['TARGET'].values[0]*100
-    is_default = prob >= 50.0
-    st.write(f'The client {id} has a {str(round(prob, 1))}% risk of defaulting on their loan.')
+if result_plts:
+    
+    st.subheader('Result Plots')
+    is_default = False
 
-    if prob < 80:
-      st.write('The client will not get credit.')
-    else:
-        st.write('The client will get credit.')
-except:
-    pass
+    try:
+        id = st.text_input('Enter Client ID:')
+        #id=394688
+        prob = result.loc[result['SK_ID_CURR']==id]['TARGET'].values[0]*100
+        is_default = prob >= 50.0
+        st.write(f'The client {id} has a {str(round(prob, 1))}% risk of defaulting on their loan.')
 
-try:
-    result['SK_ID_CURR'] = result['SK_ID_CURR'].astype('str')
-    result['DAYS_BIRTH'] = abs(result['DAYS_BIRTH'])
-    client = result[result['SK_ID_CURR']==id]
-    sameClass = result[result['Class']==int(client['Class'].values[0])]
-    if int(client['Class'])==1:
-        oppClass=result[result['Class']==0]
-    else:
-        oppClass=result[result['Class']==1]
+        if prob < 80:
+          st.write('The client will not get credit.')
+        else:
+            st.write('The client will get credit.')
+    except:
+        pass
 
-    for key, val in focus.items():
+    try:
+        result['SK_ID_CURR'] = result['SK_ID_CURR'].astype('str')
+        result['DAYS_BIRTH'] = abs(result['DAYS_BIRTH'])
+        client = result[result['SK_ID_CURR']==id]
+        sameClass = result[result['Class']==int(client['Class'].values[0])]
+        if int(client['Class'])==1:
+            oppClass=result[result['Class']==0]
+        else:
+            oppClass=result[result['Class']==1]
 
-        temp = pd.DataFrame(columns=['Target','Average','SameGroup','OppGroup'])
-        temp['Target']=client[key]
-        temp['Average']=np.average(result[key].values)
-        temp['SameGroup']=np.average(sameClass[key].values)
-        temp['OppGroup']=np.average(oppClass[key].values)
-        temp = temp.T
-        fig9 = plt.figure(figsize=(10, 5))
-        plt.barh(temp.index, temp[temp.columns[0]], color=plt.cm.Accent_r(np.arange(len(temp))))
-        plt.title(key)
-        #plt.savefig("./images/"+key+".png")
-        plt.show()
-        st.pyplot(fig9)
+        for key, val in focus.items():
+
+            temp = pd.DataFrame(columns=['Target','Average','SameGroup','OppGroup'])
+            temp['Target']=client[key]
+            temp['Average']=np.average(result[key].values)
+            temp['SameGroup']=np.average(sameClass[key].values)
+            temp['OppGroup']=np.average(oppClass[key].values)
+            temp = temp.T
+            fig9 = plt.figure(figsize=(10, 5))
+            plt.barh(temp.index, temp[temp.columns[0]], color=plt.cm.Accent_r(np.arange(len(temp))))
+            plt.title(key)
+            #plt.savefig("./images/"+key+".png")
+            plt.show()
+            st.pyplot(fig9)
 
         if is_default:
 
@@ -184,9 +188,9 @@ try:
             #plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
             plt.show()
             st.pyplot(fig11)
-        
-except:
-  print('Please enter client ID again')
+
+    except:
+      print('Please enter client ID again')
 
 ## Lime and Shap plots
 
@@ -235,60 +239,60 @@ X_test = X_test.reset_index(drop=True)
 y_train = y_train.reset_index(drop=True)
 y_test = y_test.reset_index(drop=True)
 
-import lightgbm as lgb
+#import lightgbm as lgb
 
-lb = lgb.LGBMClassifier(class_weight='balanced',n_estimators=300,learning_rate=0.05)
+#lgb = lgb.LGBMClassifier(class_weight='balanced',n_estimators=300,learning_rate=0.05)
 
-pipe_lb = Pipeline([
-    ('preprocess', preprocessor),('model',lb)
-])
+# pipe_lb = Pipeline([
+#     ('preprocess', preprocessor),('model',lgb)
+# ])
 
-pipe_lb.fit(X_train,y_train)
+# pipe_lb.fit(X_train,y_train)
+
+model = model = pickle.load(open('/data/lgbmodel.pkl', 'rb'))
 
 ## Applying the LIME for LightGBM
 pipe = Pipeline([('preprocessor', preprocessor)]) 
 train_data = pipe.fit_transform(X_train)
 test_data = pipe.fit_transform(X_test)
 
-st.subheader('Lime Explanation Plot')
+lime_plt = st.button('Lime Plot')
 
-class_names = [0, 1]
-#instantiate the explanations for the data set
-limeexplainer = LimeTabularExplainer(train_data, class_names=class_names, feature_names = X_train.columns, discretize_continuous = False)
-result_df = result[result['SK_ID_CURR']==id]
-idx=result.index[0] # the rows of the dataset
-exp = limeexplainer.explain_instance(test_data[idx], lb.predict_proba, num_features=10, labels=class_names)
-components.html(exp.as_html(), height=800)
+if lime_plt:
+    
+    st.subheader('Lime Explanation Plot')
 
-st.subheader("Shap Explanation plots") 
+    class_names = [0, 1]
+    #instantiate the explanations for the data set
+    limeexplainer = LimeTabularExplainer(train_data, class_names=class_names, feature_names = X_train.columns, discretize_continuous = False)
+    result_df = result[result['SK_ID_CURR']==id]
+    idx=result.index[0] # the rows of the dataset
+    exp = limeexplainer.explain_instance(test_data[idx], model.predict_proba, num_features=10, labels=class_names)
+    components.html(exp.as_html(), height=800)
 
-sub_sampled_train_data = shap.sample(train_data, 1000, random_state=0) # use 1000 samples of train data as background data
+shap_plt = st.button('SHAP Plot')
 
-subsampled_test_data = test_data[idx].reshape(1,-1)
+if shap_plt:
+    
+    st.subheader("Shap Explanation Plot") 
 
-# explain first sample from test data
-start_time = time.time()
-explainer = shap.TreeExplainer(lb)
-shap_values = explainer.shap_values(subsampled_test_data)
-elapsed_time = time.time() - start_time
+    sub_sampled_train_data = shap.sample(train_data, 1000, random_state=0) # use 1000 samples of train data as background data
 
-st.write('Shap Force Plot')
+    subsampled_test_data = test_data[idx].reshape(1,-1)
 
-st.write(f"Tree Explainer SHAP run time for lightgbm is {round(elapsed_time,3)} in seconds")
-st.write(f"SHAP expected value: {[explainer.expected_value]}")
-st.write(f"Model mean value : {[lb.predict_proba(train_data).mean(axis=0)]}")
-st.write(f"Model prediction for test data : {[lb.predict_proba(subsampled_test_data)]}")
+    # explain first sample from test data
+    start_time = time.time()
+    explainer = shap.TreeExplainer(lb)
+    shap_values = explainer.shap_values(subsampled_test_data)
+    elapsed_time = time.time() - start_time
 
-try:
-
-   force_plot = shap.force_plot(explainer.expected_value[1], shap_values[1][0], subsampled_test_data[idx], feature_names=X_train.columns, matplotlib=True, show=False)
-   st.pyplot(force_plot)
-
-except:
-   st.write("Error due to index out of bounds")
-
-st.write('Shap Summary Plot')
-
-fig, ax = plt.subplots(nrows=1, ncols=1)
-shap.summary_plot(shap_values, subsampled_test_data, feature_names=X_train.columns, max_display=10)
-st.pyplot(fig)
+    st.write(f"Tree Explainer SHAP run time for lightgbm is {round(elapsed_time,3)} in seconds")
+    st.write(f"SHAP expected value: {[explainer.expected_value]}")
+    st.write(f"Model mean value : {[model.predict_proba(train_data).mean(axis=0)]}")
+    st.write(f"Model prediction for test data : {[model.predict_proba(subsampled_test_data)]}")
+    
+    st.write('Shap Summary Plot')
+    
+    fig, ax = plt.subplots(nrows=1, ncols=1)
+    shap.summary_plot(shap_values, subsampled_test_data, feature_names=X_train.columns, max_display=10)
+    st.pyplot(fig)
