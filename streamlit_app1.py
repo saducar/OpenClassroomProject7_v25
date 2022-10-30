@@ -234,8 +234,8 @@ preprocessor = ColumnTransformer([
 ])
 
 pipe = Pipeline([('preprocessor', preprocessor)]) 
-train_data = pipe.fit_transform(X_train)
-test_data = pipe.fit_transform(X_test)
+train_data = pipe.fit_transform(x_train)
+test_data = pipe.fit_transform(x_test)
 
 model = pickle.load(open('./data/lgbmodel.pkl', 'rb'))
 
@@ -249,9 +249,9 @@ if lime_plt:
 
     class_names = [0, 1]
     #instantiate the explanations for the data set
-    limeexplainer = LimeTabularExplainer(train_data, class_names=class_names, feature_names = X_train.columns, discretize_continuous = False)
-    X_df = result[result['SK_ID_CURR']==id]
-    idx = X_df.index[0] # the rows of the dataset
+    limeexplainer = LimeTabularExplainer(train_data, class_names=class_names, feature_names = x_train.columns, discretize_continuous = False)
+    x_df = result[result['SK_ID_CURR']==id]
+    idx = x_df.index[0] # the rows of the dataset
     exp = limeexplainer.explain_instance(test_data[idx], model.predict_proba, num_features=10, labels=class_names)
     components.html(exp.as_html(), height=800)
 
@@ -262,8 +262,8 @@ if shap_plt:
     st.subheader("Shap Explanation Plot") 
 
     sub_sampled_train_data = shap.sample(train_data, 1000, random_state=42) # use 1000 samples of train data as background data
-    X_df = result[result['SK_ID_CURR']==id]
-    idx = X_df.index[0] # the rows of the dataset
+    x_df = result[result['SK_ID_CURR']==id]
+    idx = x_df.index[0] # the rows of the dataset
     subsampled_test_data = test_data[idx].reshape(1,-1)
 
     # explain first sample from test data
@@ -274,11 +274,11 @@ if shap_plt:
 
     st.write(f"Tree Explainer SHAP run time for lightgbm is {round(elapsed_time,3)} in seconds")
     st.write(f"SHAP expected value: {[explainer.expected_value]}")
-    st.write(f"Model mean value : {[model.predict_proba(X_train).mean(axis=0)]}")
+    st.write(f"Model mean value : {[model.predict_proba(x_train).mean(axis=0)]}")
     st.write(f"Model prediction for test data : {[model.predict_proba(subsampled_test_data)]}")
     
     st.write('Shap Summary Plot')
     
     fig, ax = plt.subplots(nrows=1, ncols=1)
-    shap.summary_plot(shap_values, subsampled_test_data, feature_names=X_train.columns, max_display=10)
+    shap.summary_plot(shap_values, subsampled_test_data, feature_names=x_train.columns, max_display=10)
     st.pyplot(fig)
