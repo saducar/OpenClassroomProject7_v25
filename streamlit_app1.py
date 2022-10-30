@@ -223,6 +223,8 @@ if lime_plt:
     class_names = [0, 1]
     #instantiate the explanations for the data set
     limeexplainer = LimeTabularExplainer(X_train, class_names=class_names, feature_names = X_train.columns, discretize_continuous = False)
+    data_df = data[data['SK_ID_CURR']==id]
+    idx = int(data_df.index[0]) # the rows of the dataset
     exp = limeexplainer.explain_instance(X_test.iloc[idx], model.predict_proba, num_features=10, labels=class_names)
     components.html(exp.as_html(), height=800)
 
@@ -233,6 +235,8 @@ if shap_plt:
     st.subheader("Shap Explanation Plot") 
 
     sub_sampled_train_data = shap.sample(X_train, 1000, random_state=42) # use 1000 samples of train data as background data
+    data_df = data[data['SK_ID_CURR']==id]
+    idx = int(data_df.index[0]) # the rows of the dataset
     subsampled_test_data = X_test.iloc[idx].reshape(1,-1)
 
     # explain first sample from test data
