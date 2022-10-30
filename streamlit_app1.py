@@ -185,6 +185,9 @@ try:
         plt.show()
         st.pyplot(fig11)
         
+    else:
+        pass
+        
 except:
   print('Please enter client ID again')
 
