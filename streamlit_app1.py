@@ -30,6 +30,7 @@ def load_data(file):
     return df
 
 result = load_data('results')
+train_df = load_data('train_data')
 
 # Pie Chart
 
