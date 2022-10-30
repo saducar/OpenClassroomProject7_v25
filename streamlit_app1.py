@@ -123,13 +123,11 @@ result_plts = st.button('Result Plots')
 if result_plts:
     
     st.subheader('Result Plots')
-    is_default = False
 
     try:
         id = st.text_input('Enter Client ID:')
         #id=394688
         prob = result.loc[result['SK_ID_CURR']==id]['TARGET'].values[0]*100
-        is_default = prob >= 50.0
         st.write(f'The client {id} has a {str(round(prob, 1))}% risk of defaulting on their loan.')
 
         if prob < 80:
@@ -138,8 +136,6 @@ if result_plts:
             st.write('The client will get credit.')
     except:
         pass
-
-
 
     try:
         result['SK_ID_CURR'] = result['SK_ID_CURR'].astype('str')
@@ -166,12 +162,7 @@ if result_plts:
             plt.show()
             st.pyplot(fig9)
 
-    except:
-       print('Please enter client ID again')
-
-    
-
-    if is_default:
+       if prob >=50:
 
             st.write("Age Vs Amount Income")
             fig10 = plt.figure(figsize=(10, 5))
@@ -195,7 +186,11 @@ if result_plts:
             #plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
             plt.show()
             st.pyplot(fig11)
-  
+     else:
+         pass
+        
+   except:
+       print('Please enter client ID again')
 
 ## Lime and Shap plots
 
