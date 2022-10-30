@@ -198,7 +198,7 @@ st.subheader('Lime and Shap plots')
 
 # Creating column transformer to select all column names that has Binary & a list for non Binary.
 data = load_data('results')
-X = data.drop(['Unnamed: 0','Class', 'TARGET'],axis=1)
+X = data.drop(['Unnamed: 0','Class', 'TARGET', 'Age(years)', 'Age_cat'],axis=1)
 y = data['Class']
 st.write(X.head())
 
