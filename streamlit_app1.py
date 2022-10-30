@@ -191,7 +191,6 @@ try:
 except:
   print('Please enter client ID again')
 
-
 ## Lime and Shap plots
 
 st.subheader('Lime and Shap plots')
@@ -200,7 +199,6 @@ st.subheader('Lime and Shap plots')
 data = load_data('results')
 X = data.drop(['Unnamed: 0','Class', 'TARGET', 'Age(years)', 'Age_cat'],axis=1)
 y = data['Class']
-st.write(X.head())
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -210,6 +208,9 @@ y_train = y_train.reset_index(drop=True)
 y_test = y_test.reset_index(drop=True)
 
 model = pickle.load(open('./data/lgbmodel.pkl', 'rb'))
+
+data_df = data[data['SK_ID_CURR']==id]
+idx = int(data_df.index[0]) # the rows of the dataset
 
 ## Applying the LIME for LightGBM
 
@@ -222,9 +223,6 @@ if lime_plt:
     class_names = [0, 1]
     #instantiate the explanations for the data set
     limeexplainer = LimeTabularExplainer(X_train, class_names=class_names, feature_names = X_train.columns, discretize_continuous = False)
-    data_df = data[data['SK_ID_CURR']==id]
-    idx = data_df.index[0]# the rows of the dataset
-    st.write(idx)
     exp = limeexplainer.explain_instance(X_test.iloc[idx], model.predict_proba, num_features=10, labels=class_names)
     components.html(exp.as_html(), height=800)
 
@@ -235,8 +233,6 @@ if shap_plt:
     st.subheader("Shap Explanation Plot") 
 
     sub_sampled_train_data = shap.sample(X_train, 1000, random_state=42) # use 1000 samples of train data as background data
-    data_df = data[data['SK_ID_CURR']==id]
-    idx = data_df.index[0] # the rows of the dataset
     subsampled_test_data = X_test.iloc[idx].reshape(1,-1)
 
     # explain first sample from test data
