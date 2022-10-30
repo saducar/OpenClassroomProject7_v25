@@ -143,7 +143,7 @@ if result_plts:
         
 #         proba = result.loc[result['SK_ID_CURR']==id]['TARGET'].values[0]*100
 
-        if proba >=50:
+        if prob >=50:
 
             result['SK_ID_CURR'] = result['SK_ID_CURR'].astype('str')
             result['DAYS_BIRTH'] = abs(result['DAYS_BIRTH'])
