@@ -162,7 +162,7 @@ if result_plts:
             plt.show()
             st.pyplot(fig9)
 
-       if prob >=50:
+        if prob >=50:
 
             st.write("Age Vs Amount Income")
             fig10 = plt.figure(figsize=(10, 5))
