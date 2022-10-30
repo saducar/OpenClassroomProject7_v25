@@ -198,9 +198,9 @@ st.subheader('Lime and Shap plots')
 
 
 # Creating column transformer to select all column names that has Binary & a list for non Binary.
-
-X = result.drop(['Unnamed: 0','TARGET'],axis=1)
-y = result['Class']
+result1 = load_data('results')
+X = result1.drop(['Unnamed: 0','TARGET'],axis=1)
+y = result1['Class']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -222,7 +222,7 @@ if lime_plt:
     class_names = [0, 1]
     #instantiate the explanations for the data set
     limeexplainer = LimeTabularExplainer(X_train, class_names=class_names, feature_names = X_train.columns, discretize_continuous = False)
-    result_df = result[result['SK_ID_CURR']==id]
+    result_df = result1[result1['SK_ID_CURR']==id]
     idx = result_df.index[0] # the rows of the dataset
     exp = limeexplainer.explain_instance(X_test[idx], model.predict_proba, num_features=10, labels=class_names)
     components.html(exp.as_html(), height=800)
@@ -234,7 +234,7 @@ if shap_plt:
     st.subheader("Shap Explanation Plot") 
 
     sub_sampled_train_data = shap.sample(X_train, 1000, random_state=42) # use 1000 samples of train data as background data
-    result_df = result[result['SK_ID_CURR']==id]
+    result_df = result1[result1['SK_ID_CURR']==id]
     idx = result_df.index[0] # the rows of the dataset
     subsampled_test_data = X_test[idx].reshape(1,-1)
 
