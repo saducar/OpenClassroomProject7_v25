@@ -249,7 +249,7 @@ y_test = y_test.reset_index(drop=True)
 
 # pipe_lb.fit(X_train,y_train)
 
-model = model = pickle.load(open('./data/lgbmodel.pkl', 'rb'))
+model = pickle.load(open('./data/lgbmodel.pkl', 'rb'))
 
 ## Applying the LIME for LightGBM
 pipe = Pipeline([('preprocessor', preprocessor)]) 
@@ -277,7 +277,7 @@ if shap_plt:
     
     st.subheader("Shap Explanation Plot") 
 
-    sub_sampled_train_data = shap.sample(train_data, 1000, random_state=0) # use 1000 samples of train data as background data
+    sub_sampled_train_data = shap.sample(train_data, 1000, random_state=42) # use 1000 samples of train data as background data
 
     subsampled_test_data = test_data[idx].reshape(1,-1)
 
