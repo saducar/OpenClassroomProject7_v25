@@ -6,7 +6,7 @@ streamlit
 lightgbm
 MarkupSafe
 gunicorn
-pickle-mixin
+pickle
 shap
 Pillow
 requests
