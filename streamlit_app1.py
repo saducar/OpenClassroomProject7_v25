@@ -202,12 +202,13 @@ y = data['Class']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-X_train = X_train.reset_index(drop=True)
-X_test = X_test.reset_index(drop=True)
-y_train = y_train.reset_index(drop=True)
-y_test = y_test.reset_index(drop=True)
+X_train = np.array(X_train)
+X_test = np.array(X_test)
 
 model = pickle.load(open('./data/lgbmodel.pkl', 'rb'))
+
+X_df = X[X['SK_ID_CURR']==id]
+idx = X_df.index[0] # the rows of the dataset
 
 ## Applying the LIME for LightGBM
 
@@ -220,9 +221,7 @@ if lime_plt:
     class_names = [0, 1]
     #instantiate the explanations for the data set
     limeexplainer = LimeTabularExplainer(X_train, class_names=class_names, feature_names = X_train.columns, discretize_continuous = False)
-    X_df = X_train[X_train['SK_ID_CURR']==id]
-    idx = int(X_df.index[0]) # the rows of the dataset
-    exp = limeexplainer.explain_instance(X_test.iloc[idx], model.predict_proba, num_features=10, labels=class_names)
+    exp = limeexplainer.explain_instance(X_test[idx], model.predict_proba, num_features=10, labels=class_names)
     components.html(exp.as_html(), height=800)
 
 shap_plt = st.button('SHAP Plot')
@@ -232,9 +231,7 @@ if shap_plt:
     st.subheader("Shap Explanation Plot") 
 
     sub_sampled_train_data = shap.sample(X_train, 1000, random_state=42) # use 1000 samples of train data as background data
-    X_df = X_train[X_train['SK_ID_CURR']==id]
-    idx = int(X_df.index[0]) # the rows of the dataset
-    subsampled_test_data = X_test.iloc[idx].reshape(1,-1)
+    subsampled_test_data = X_test[idx].reshape(1,-1)
 
     # explain first sample from test data
     start_time = time.time()
