@@ -249,7 +249,7 @@ y_test = y_test.reset_index(drop=True)
 
 # pipe_lb.fit(X_train,y_train)
 
-model = model = pickle.load(open('/data/lgbmodel.pkl', 'rb'))
+model = model = pickle.load(open('./data/lgbmodel.pkl', 'rb'))
 
 ## Applying the LIME for LightGBM
 pipe = Pipeline([('preprocessor', preprocessor)]) 
