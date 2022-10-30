@@ -198,7 +198,7 @@ st.subheader('Lime and Shap plots')
 X = train_df.drop(['Unnamed: 0', 'Unnamed: 0.1','TARGET'],axis=1)
 y = train_df['TARGET']
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2,random_state=42)
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size = 0.2,random_state=42)
 
 cat_cols = ['NAME_CONTRACT_TYPE_x','CODE_GENDER','FLAG_OWN_CAR', 'FLAG_OWN_REALTY','CNT_CHILDREN','NAME_TYPE_SUITE','NAME_INCOME_TYPE','NAME_EDUCATION_TYPE',
             'NAME_FAMILY_STATUS','NAME_HOUSING_TYPE','FLAG_MOBIL','FLAG_WORK_PHONE','FLAG_CONT_MOBILE','FLAG_PHONE','FLAG_EMAIL',
