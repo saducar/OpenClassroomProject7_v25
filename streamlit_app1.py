@@ -125,7 +125,7 @@ try:
     id = st.text_input('Enter Client ID:')
     #id=394688
     prob = result.loc[result['SK_ID_CURR']==id]['TARGET'].values[0]*100
-    is_default = prob >= 50.0
+    is_default = prob >= 50
     st.write(f'The client {id} has a {str(round(prob, 1))}% risk of defaulting on their loan.')
 
     if prob < 80:
