@@ -117,80 +117,80 @@ focus={'AMT_CREDIT_PERCENT': "the average between the loan and the income",
        'AMT_CREDIT':' Credit amount of the loan'}
 
 st.write(focus)
+    
+st.subheader('Result Plots')
+is_default = False
+
+try:
+    id = st.text_input('Enter Client ID:')
+    #id=394688
+    prob = result.loc[result['SK_ID_CURR']==id]['TARGET'].values[0]*100
+    is_default = prob >= 50.0
+    st.write(f'The client {id} has a {str(round(prob, 1))}% risk of defaulting on their loan.')
+
+    if prob < 80:
+      st.write('The client will not get credit.')
+    else:
+        st.write('The client will get credit.')
+except:
+    pass
 
 result_plts = st.button('Result Plots')
 
 if result_plts:
-    
-    st.subheader('Result Plots')
-    is_default = False
 
-    try:
-        id = st.text_input('Enter Client ID:')
-        #id=394688
-        prob = result.loc[result['SK_ID_CURR']==id]['TARGET'].values[0]*100
-        is_default = prob >= 50.0
-        st.write(f'The client {id} has a {str(round(prob, 1))}% risk of defaulting on their loan.')
+        try:
+            result['SK_ID_CURR'] = result['SK_ID_CURR'].astype('str')
+            result['DAYS_BIRTH'] = abs(result['DAYS_BIRTH'])
+            client = result[result['SK_ID_CURR']==id]
+            sameClass = result[result['Class']==int(client['Class'].values[0])]
+            if int(client['Class'])==1:
+                oppClass=result[result['Class']==0]
+            else:
+                oppClass=result[result['Class']==1]
 
-        if prob < 80:
-          st.write('The client will not get credit.')
-        else:
-            st.write('The client will get credit.')
-    except:
-        pass
+            for key, val in focus.items():
 
-    try:
-        result['SK_ID_CURR'] = result['SK_ID_CURR'].astype('str')
-        result['DAYS_BIRTH'] = abs(result['DAYS_BIRTH'])
-        client = result[result['SK_ID_CURR']==id]
-        sameClass = result[result['Class']==int(client['Class'].values[0])]
-        if int(client['Class'])==1:
-            oppClass=result[result['Class']==0]
-        else:
-            oppClass=result[result['Class']==1]
+                temp = pd.DataFrame(columns=['Target','Average','SameGroup','OppGroup'])
+                temp['Target']=client[key]
+                temp['Average']=np.average(result[key].values)
+                temp['SameGroup']=np.average(sameClass[key].values)
+                temp['OppGroup']=np.average(oppClass[key].values)
+                temp = temp.T
+                fig9 = plt.figure(figsize=(10, 5))
+                plt.barh(temp.index, temp[temp.columns[0]], color=plt.cm.Accent_r(np.arange(len(temp))))
+                plt.title(key)
+                #plt.savefig("./images/"+key+".png")
+                plt.show()
+                st.pyplot(fig9)
 
-        for key, val in focus.items():
+            if is_default:
 
-            temp = pd.DataFrame(columns=['Target','Average','SameGroup','OppGroup'])
-            temp['Target']=client[key]
-            temp['Average']=np.average(result[key].values)
-            temp['SameGroup']=np.average(sameClass[key].values)
-            temp['OppGroup']=np.average(oppClass[key].values)
-            temp = temp.T
-            fig9 = plt.figure(figsize=(10, 5))
-            plt.barh(temp.index, temp[temp.columns[0]], color=plt.cm.Accent_r(np.arange(len(temp))))
-            plt.title(key)
-            #plt.savefig("./images/"+key+".png")
-            plt.show()
-            st.pyplot(fig9)
+                st.write("Age Vs Amount Income")
+                fig10 = plt.figure(figsize=(10, 5))
+                # fig_1, ax_1 = plt.subplots()
 
-        if is_default:
+                plt.bar(data["Age_cat"], data["AMT_INCOME_TOTAL"], color="blue")
+                plt.hlines(y=client["AMT_INCOME_TOTAL"], xmin=0, xmax="60-70")
+                plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_INCOME_TOTAL"]+10000)
+                # result.groupby(['Age(years)','AMT_INCOME_TOTAL']).sum().unstack().plot()
+                plt.title("Age Groups vs Average Amount of Income")
+                #plt.savefig("./images/" + "AVG_AGE_AMT_OF_INCOME_BAR" + ".png")
+                plt.show()
+                st.pyplot(fig10)
 
-            st.write("Age Vs Amount Income")
-            fig10 = plt.figure(figsize=(10, 5))
-            # fig_1, ax_1 = plt.subplots()
+                st.write("Age vs Total Amount Credit")
+                fig11 = plt.figure(figsize=(10, 5))
+                plt.bar(data["Age_cat"], data["AMT_CREDIT"], color="red")
+                plt.hlines(y=client["AMT_CREDIT"], xmin=0, xmax="60-70")
+                plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_CREDIT"]+10000)
+                plt.title("Age Groups vs Average Amount of Credit")
+                #plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
+                plt.show()
+                st.pyplot(fig11)
 
-            plt.bar(data["Age_cat"], data["AMT_INCOME_TOTAL"], color="blue")
-            plt.hlines(y=client["AMT_INCOME_TOTAL"], xmin=0, xmax="60-70")
-            plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_INCOME_TOTAL"]+10000)
-            # result.groupby(['Age(years)','AMT_INCOME_TOTAL']).sum().unstack().plot()
-            plt.title("Age Groups vs Average Amount of Income")
-            #plt.savefig("./images/" + "AVG_AGE_AMT_OF_INCOME_BAR" + ".png")
-            plt.show()
-            st.pyplot(fig10)
-
-            st.write("Age vs Total Amount Credit")
-            fig11 = plt.figure(figsize=(10, 5))
-            plt.bar(data["Age_cat"], data["AMT_CREDIT"], color="red")
-            plt.hlines(y=client["AMT_CREDIT"], xmin=0, xmax="60-70")
-            plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_CREDIT"]+10000)
-            plt.title("Age Groups vs Average Amount of Credit")
-            #plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
-            plt.show()
-            st.pyplot(fig11)
-
-    except:
-      print('Please enter client ID again')
+        except:
+          print('Please enter client ID again')
 
 ## Lime and Shap plots
 
