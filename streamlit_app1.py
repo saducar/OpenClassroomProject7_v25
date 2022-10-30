@@ -274,7 +274,7 @@ if shap_plt:
 
     st.write(f"Tree Explainer SHAP run time for lightgbm is {round(elapsed_time,3)} in seconds")
     st.write(f"SHAP expected value: {[explainer.expected_value]}")
-    st.write(f"Model mean value : {[model.predict_proba(x_train).mean(axis=0)]}")
+    st.write(f"Model mean value : {[model.predict_proba(train_data).mean(axis=0)]}")
     st.write(f"Model prediction for test data : {[model.predict_proba(subsampled_test_data)]}")
     
     st.write('Shap Summary Plot')
