@@ -163,34 +163,35 @@ if result_plts:
                 #plt.savefig("./images/"+key+".png")
                 plt.show()
                 st.pyplot(fig9)
-
-            if is_default:
-
-                st.write("Age Vs Amount Income")
-                fig10 = plt.figure(figsize=(10, 5))
-                # fig_1, ax_1 = plt.subplots()
-
-                plt.bar(data["Age_cat"], data["AMT_INCOME_TOTAL"], color="blue")
-                plt.hlines(y=client["AMT_INCOME_TOTAL"], xmin=0, xmax="60-70")
-                plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_INCOME_TOTAL"]+10000)
-                # result.groupby(['Age(years)','AMT_INCOME_TOTAL']).sum().unstack().plot()
-                plt.title("Age Groups vs Average Amount of Income")
-                #plt.savefig("./images/" + "AVG_AGE_AMT_OF_INCOME_BAR" + ".png")
-                plt.show()
-                st.pyplot(fig10)
-
-                st.write("Age vs Total Amount Credit")
-                fig11 = plt.figure(figsize=(10, 5))
-                plt.bar(data["Age_cat"], data["AMT_CREDIT"], color="red")
-                plt.hlines(y=client["AMT_CREDIT"], xmin=0, xmax="60-70")
-                plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_CREDIT"]+10000)
-                plt.title("Age Groups vs Average Amount of Credit")
-                #plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
-                plt.show()
-                st.pyplot(fig11)
-
+                
         except:
-          print('Please enter client ID again')
+           print('Please enter client ID again')
+
+
+        if is_default:
+
+            st.write("Age Vs Amount Income")
+            fig10 = plt.figure(figsize=(10, 5))
+            # fig_1, ax_1 = plt.subplots()
+
+            plt.bar(data["Age_cat"], data["AMT_INCOME_TOTAL"], color="blue")
+            plt.hlines(y=client["AMT_INCOME_TOTAL"], xmin=0, xmax="60-70")
+            plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_INCOME_TOTAL"]+10000)
+            # result.groupby(['Age(years)','AMT_INCOME_TOTAL']).sum().unstack().plot()
+            plt.title("Age Groups vs Average Amount of Income")
+            #plt.savefig("./images/" + "AVG_AGE_AMT_OF_INCOME_BAR" + ".png")
+            plt.show()
+            st.pyplot(fig10)
+
+            st.write("Age vs Total Amount Credit")
+            fig11 = plt.figure(figsize=(10, 5))
+            plt.bar(data["Age_cat"], data["AMT_CREDIT"], color="red")
+            plt.hlines(y=client["AMT_CREDIT"], xmin=0, xmax="60-70")
+            plt.vlines(x=client["Age_cat"], ymin=0, ymax=client["AMT_CREDIT"]+10000)
+            plt.title("Age Groups vs Average Amount of Credit")
+            #plt.savefig("./images/" + "AVG_AGE_AMT_OF_CREDIT" + ".png")
+            plt.show()
+            st.pyplot(fig11)
 
 ## Lime and Shap plots
 
@@ -256,6 +257,9 @@ pipe = Pipeline([('preprocessor', preprocessor)])
 train_data = pipe.fit_transform(X_train)
 test_data = pipe.fit_transform(X_test)
 
+result_df = result[result['SK_ID_CURR']==id]
+idx=result.index[0] # the rows of the dataset
+    
 lime_plt = st.button('Lime Plot')
 
 if lime_plt:
@@ -265,8 +269,6 @@ if lime_plt:
     class_names = [0, 1]
     #instantiate the explanations for the data set
     limeexplainer = LimeTabularExplainer(train_data, class_names=class_names, feature_names = X_train.columns, discretize_continuous = False)
-    result_df = result[result['SK_ID_CURR']==id]
-    idx=result.index[0] # the rows of the dataset
     exp = limeexplainer.explain_instance(test_data[idx], model.predict_proba, num_features=10, labels=class_names)
     components.html(exp.as_html(), height=800)
 
