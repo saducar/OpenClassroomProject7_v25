@@ -134,13 +134,11 @@ if result_plts:
           st.write('The client will not get credit.')
         else:
             st.write('The client will get credit.')
-    except:
-        pass
-
-    try:
+            
         result['SK_ID_CURR'] = result['SK_ID_CURR'].astype('str')
         result['DAYS_BIRTH'] = abs(result['DAYS_BIRTH'])
         client = result[result['SK_ID_CURR']==id]
+        
         sameClass = result[result['Class']==int(client['Class'].values[0])]
         if int(client['Class'])==1:
             oppClass=result[result['Class']==0]
@@ -259,7 +257,7 @@ test_data = pipe.fit_transform(X_test)
 result_df = result[result['SK_ID_CURR']==id]
 idx=result.index[0] # the rows of the dataset
     
-lime_plt = st.button('Lime Plot')
+lime_plt = st.button('LIME Plot')
 
 if lime_plt:
     
