@@ -200,6 +200,7 @@ st.subheader('Lime and Shap plots')
 result1 = load_data('results')
 X = result1.drop(['Unnamed: 0','Class', 'TARGET'],axis=1)
 y = result1['Class']
+st.write(X.head())
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
