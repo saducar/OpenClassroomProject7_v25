@@ -256,8 +256,6 @@ components.html(exp.as_html(), height=800)
 st.subheader("Shap Explanation Plot") 
 
 sub_sampled_train_data = shap.sample(train_data, 1000, random_state=42) # use 1000 samples of train data as background data
-x_df = result[result['SK_ID_CURR']==id]
-idx = x_df.index[0] # the rows of the dataset
 subsampled_test_data = test_data[idx].reshape(1,-1)
 
 # explain first sample from test data
