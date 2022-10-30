@@ -188,9 +188,8 @@ if result_plts:
             st.pyplot(fig11)
      else:
          pass
-        
-   except:
-       print('Please enter client ID again')
+    except:
+        print('Please enter client ID again')
 
 ## Lime and Shap plots
 
