@@ -11,4 +11,4 @@ shap
 Pillow
 requests
 lime
-scikit-learn==1.0.2
+scikit-learn==1.1.2
