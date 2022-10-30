@@ -118,10 +118,14 @@ focus={'AMT_CREDIT_PERCENT': "the average between the loan and the income",
 
 st.write(focus)
 
-id = st.text_input('Enter Client ID:')
-#id=394688
-prob = result.loc[result['SK_ID_CURR']==id]['TARGET'].values[0]*100
-st.write(f'The client {id} has a {str(round(prob, 1))}% risk of defaulting on their loan.')
+try:
+    
+    id = st.text_input('Enter Client ID:')
+    #id=394688
+    prob = result.loc[result['SK_ID_CURR']==id]['TARGET'].values[0]*100
+    st.write(f'The client {id} has a {str(round(prob, 1))}% risk of defaulting on their loan.')
+except:
+    pass
 
 result_plts = st.button('Result Plots')  
 
