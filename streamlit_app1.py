@@ -130,8 +130,8 @@ try:
     else:
         st.write('The client will not get credit.')
         
- except:
-     pass
+except:
+    pass
 
 result_plts = st.button('Result Plots')  
 
