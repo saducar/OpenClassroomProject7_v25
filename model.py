@@ -2,6 +2,8 @@ import pickle
 import pandas as pd
 import lightgbm as lgb
 import re
+from joblib import dump, load
+
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import make_pipeline,Pipeline
@@ -60,7 +62,10 @@ pipe_lb = Pipeline([
 
 pipe_lb.fit(x_train,y_train)
 
-pickle.dump(lgb, open('./data/lgbmodel.pkl', 'wb'))
+# pickle.dump(lgb, open('./data/lgbmodel.pkl', 'wb'))
+
+dump(lgb,'./data/lgbmodel.joblib')
+
 
 # model = pickle.load(open('./data/lgbmodel.pkl', 'rb'))
 # predict = model.predict(x_test)
