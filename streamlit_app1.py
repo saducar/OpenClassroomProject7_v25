@@ -4,7 +4,7 @@ import streamlit.components.v1 as components
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-import pickle 
+import pickle5 as pickle
 import requests
 import json
 import time
