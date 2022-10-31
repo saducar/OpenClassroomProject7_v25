@@ -13,6 +13,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import make_pipeline,Pipeline
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+from joblib import dump, load
 
 from lime.lime_tabular import LimeTabularExplainer
 import shap
@@ -237,7 +238,8 @@ pipe = Pipeline([('preprocessor', preprocessor)])
 train_data = pipe.fit_transform(x_train)
 test_data = pipe.fit_transform(x_test)
 
-model = pickle.load(open('./data/lgbmodel.pkl', 'rb'))
+#model = pickle.load(open('./data/lgbmodel.pkl', 'rb'))
+model = load('./data/lgbmodel.joblib')
 
 ## Applying the LIME for LightGBM
 try:
